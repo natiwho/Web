@@ -5,11 +5,7 @@ import styles from '../styles/GithubPage.module.css';
 
 const GithubPage = ({ repos, user, error }) => {
   const theme = {
-    level0: '#161B22',
-    level1: '#0e4429',
-    level2: '#006d32',
-    level3: '#26a641',
-    level4: '#39d353',
+    dark: ['#161B22', '#0e4429', '#006d32', '#26a641', '#39d353'],
   };
 
   if (error) {
@@ -75,7 +71,9 @@ export async function getStaticProps() {
     }
 
     // Fetch repos data
-    const repoRes = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`);
+    const repoRes = await fetch(
+      `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`
+    );
     const reposData = await repoRes.json();
     console.log('Repos API Response:', reposData);
 
@@ -93,13 +91,23 @@ export async function getStaticProps() {
       .slice(0, 6);
 
     return {
-      props: { title: 'GitHub', repos: sortedRepos, user: userData, error: null },
+      props: {
+        title: 'GitHub',
+        repos: sortedRepos,
+        user: userData,
+        error: null,
+      },
       revalidate: 60 * 60, // Revalidate every hour
     };
   } catch (error) {
     console.error('Error in getStaticProps:', error);
     return {
-      props: { title: 'GitHub', repos: [], user: null, error: error.message },
+      props: {
+        title: 'GitHub',
+        repos: [],
+        user: null,
+        error: error.message,
+      },
       revalidate: 60 * 60, // Revalidate every hour
     };
   }
